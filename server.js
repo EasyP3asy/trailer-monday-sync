@@ -231,7 +231,10 @@ async function main() {
 
     const itemsArray = mondayResponse?.data?.boards[0]?.items_page?.items;
     
-   
+    if(!Array.isArray(itemsArray) || itemsArray.length === 0){
+       await sendErrorToTelegram("Empty Monday Reponse");
+       return ;
+    }
 
     for(const item of itemsArray){
       
@@ -656,6 +659,7 @@ function buildAliasedMutation(ops) {
   return `mutation{\n${ops.join('\n')}\n}`;
 }
 
+
 async function makeMondayApiRequest(query) {
   let attempt = 0;
   while (true) {
@@ -721,7 +725,7 @@ let isRunning = false; // to prevent overlap
 
 
 cron.schedule(
-  "*/30 * * * *",  // every 30 minutes
+  "*/15 * * * *",  // every 30 minutes
   async () => {
     if (isRunning) {
       console.log("Cron: previous run still in progress, skipping this one");

@@ -129,8 +129,6 @@ function getGroupsIDandTitleQuery(boardID){
 
 
 
-
-
 function getColumnValues(boardID){
     return `
         query {
@@ -153,6 +151,13 @@ function getColumnValues(boardID){
         }
     `;
 }
+
+
+
+
+
+
+
 
 
 // Maximum number is 500 items per page

@@ -61,8 +61,7 @@ async function ensureStateTableExists({ strict = false } = {}) {
               address_postal      text,
               idle_duration       text,
               serial_data         text,
-              time_utc            timestamptz,
-              last_updated_ago    text,
+              time_utc            timestamptz,              
               updated_at          timestamptz DEFAULT now()
         )`);
     }
