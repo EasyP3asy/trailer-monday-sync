@@ -50,7 +50,7 @@ function updateMultipleColumnValuesQuery(boardID, rowID, columnValues) {
             change_multiple_column_values(
                 board_id: ${boardID},
                 item_id: ${rowID},
-                column_values: "${JSON.stringify(columnValues).replace(/"/g, '\\"')}"
+                column_values: "${gqlEscape(JSON.stringify(columnValues))}"
             ) {
                 id
             }
@@ -65,7 +65,7 @@ function updateMultipleAlliasColumnValuesQuery(boardID, rowID, columnValues) {
         item_${rowID} : change_multiple_column_values(
             board_id: ${boardID},
             item_id: ${rowID},
-            column_values: "${JSON.stringify(columnValues).replace(/"/g, '\\"')}"
+            column_values: "${gqlEscape(JSON.stringify(columnValues))}"
         ){
             id
         }        
@@ -79,7 +79,7 @@ function createMultipleAlliasColumnValuesQuery(index,boardID, groupId,itemName, 
             board_id: ${boardID},
             group_id: "${groupId}",
             item_name: "${itemName}",
-            column_values: "${JSON.stringify(columnValues).replace(/"/g, '\\"')}"
+            column_values: "${gqlEscape(JSON.stringify(columnValues))}"
         ){
             id
         }        
@@ -129,8 +129,6 @@ function getGroupsIDandTitleQuery(boardID){
 
 
 
-
-
 function getColumnValues(boardID){
     return `
         query {
@@ -153,6 +151,13 @@ function getColumnValues(boardID){
         }
     `;
 }
+
+
+
+
+
+
+
 
 
 // Maximum number is 500 items per page
@@ -199,6 +204,13 @@ function getConnectedBoardId_ItemId(itemId,CONNECTED_BOARD_COLUMN_ID){
 
 
 
+function gqlEscape(s="") {
+  return String(s)
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r");
+}
 
 
 

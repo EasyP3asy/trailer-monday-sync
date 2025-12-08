@@ -139,6 +139,7 @@ function parseAssets(html) {
       return /Asset ID/i.test(t) && /Time of Observation/i.test(t);
     })
     .first();
+    
 
   if (!table.length) {
     throw new Error("Could not find asset results table in HTML.");
@@ -156,7 +157,7 @@ function parseAssets(html) {
   if (idxBattery === -1) {
     throw new Error("Could not find Battery Status label in table text.");
   }
-
+  
   // Everything after this are data lines
   const start = idxBattery + 1;
 
@@ -166,12 +167,11 @@ function parseAssets(html) {
   // 9 distance, 10 address, 11 quality, 12 battery
   const GROUP_SIZE = 13;
   const assets = [];
-
+  
   for (let i = start; i + GROUP_SIZE - 1 <= lines.length; i += GROUP_SIZE) {
     const g = lines.slice(i, i + GROUP_SIZE);
-
-    // Stop when it no longer looks like an id (7+ digits)
-    if (!/^\d{6,8}$/.test(g[0])) break;
+    
+    
 
     const asset = {
       assetId: g[0],
@@ -188,9 +188,14 @@ function parseAssets(html) {
       quality: g[11],
       batteryStatus: g[12],
     };
-
+   
     assets.push(asset);
   }
+  
+  // Need to remove the last element 
+  assets.length>1 ? assets.pop() : "";
+   
+ 
 
   return assets;
 }
