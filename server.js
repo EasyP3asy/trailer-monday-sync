@@ -30,10 +30,10 @@ const SAMSARA_BASE_URL = process.env.SAMSARA_BASE_URL; // trailer url
 
 
 const SLEEP = (ms) => new Promise(r => setTimeout(r, ms));
-const MAX_RETRIES = 4;
-const BASE_BACKOFF_MS = 600;
-const BATCH_SIZE = 20;        // << group into 20 ops
-const BATCH_CONCURRENCY = 3;  // run up to 3 batches in parallel (tweak if needed)
+const MAX_RETRIES = 6;
+const BASE_BACKOFF_MS = 1000;
+const BATCH_SIZE = 10;        // << group into 20 ops
+const BATCH_CONCURRENCY = 1;  // run up to 3 batches in parallel (tweak if needed)
 
 
 
@@ -231,7 +231,10 @@ async function main() {
 
     const itemsArray = mondayResponse?.data?.boards[0]?.items_page?.items;
     
-   
+    if(!Array.isArray(itemsArray) || itemsArray.length === 0){
+       await sendErrorToTelegram("Empty Monday Reponse");
+       return ;
+    }
 
     for(const item of itemsArray){
       
@@ -259,7 +262,7 @@ async function main() {
 
             const colValues ={
               "link_mktvvmv":{                   // change link column 
-                "url":`www.google.com/maps/search/?api=1&query=${trlObj.latitude},${trlObj.longitude}`,
+                "url":`https://www.google.com/maps/search/?api=1&query=${trlObj.latitude},${trlObj.longitude}`,
                 "text" :`${trlObj.fullAddress}`
               },
               "text_mktvv1mz":`${trlObj.addressState}`,          //state column
@@ -375,7 +378,7 @@ function extractState(address) {
 
 
 async function sendErrorToTelegram(messageText) {
-  const message = `🚨 *Alert!* 🚨\n\n${escapeMarkdown(messageText)}`;
+  const message = `🚨 *Alert!* Trailer-Monday-Sync-F🚨\n\n${escapeMarkdown(messageText)}`;
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
   const params = {
@@ -656,6 +659,7 @@ function buildAliasedMutation(ops) {
   return `mutation{\n${ops.join('\n')}\n}`;
 }
 
+
 async function makeMondayApiRequest(query) {
   let attempt = 0;
   while (true) {
@@ -682,9 +686,13 @@ async function makeMondayApiRequest(query) {
 
       if (json.errors && json.errors.length) {
         const msg = JSON.stringify(json.errors);
-        const transient = /rate|complexity|timeout|temporary/i.test(msg);
+
+        const isLock = /failed to acquire lock|lock/i.test(msg);
+        const transient = /rate|complexity|timeout|temporary/i.test(msg) || isLock;
+
         if (transient && attempt < MAX_RETRIES) {
-          await SLEEP(BASE_BACKOFF_MS * Math.pow(2, attempt++));
+          const jitter = Math.floor(Math.random() * 500);
+          await SLEEP(BASE_BACKOFF_MS * Math.pow(2, attempt++) + jitter);
           continue;
         }
         throw new Error(`GraphQL errors: ${msg}`);

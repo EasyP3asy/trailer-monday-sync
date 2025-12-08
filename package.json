@@ -23,5 +23,6 @@
     "node-fetch": "^2.6.0",
     "pg": "^8.10.0",
     "tough-cookie": "^6.0.0"
-  }
+  },
+  "type": "commonjs"
 }
