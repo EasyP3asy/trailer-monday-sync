@@ -1,0 +1,66 @@
+import 'dotenv/config';
+
+
+
+// ---- ORBCOMM ----
+export const ORBCOMM_USER_ID = process.env.ORBCOMM_USER_ID;
+export const ORBCOMM_USER_PASSWORD   = process.env.ORBCOMM_USER_PASSWORD;
+
+// ---- BASE URL ----
+export const ORBCOMM_BASE_URL = 'https://platform.orbcomm.com/SynB2BGatewayService/api/';
+
+export const ASSETS_LIST = [
+    "VS026551",
+    "VS026552",
+    "VS026553",
+    "VS026554",
+    "VS026555",
+    "VS026556",
+    "VS026557",
+    "VS026558",
+    "VS026559",
+    "VS026560",
+    "VS026561",
+    "VS026562",
+    "VS026563",
+    "VS026564",
+    "VS026565",
+    "VS026566",
+    "VS026567",
+    "VS026568",
+    "VS026569",
+    "VS026570",
+    "VS026571",
+    "VS026572",
+    "VS026573",
+    "VS026574",
+    "VS026575",
+    "VS026576",
+    "VS026577",
+    "VS026578",
+    "VS026579",
+    "VS026580",
+    "VS026581",
+    "VS026582",
+    "VS026583",
+    "VS026584",
+    "VS026585",
+    "VS026586",
+    "VS026587",
+    "VS026588",
+    "VS026589",
+    "VS026590",
+    "VS026591",
+    "VS026592",
+    "VS026593",
+    "VS026594",
+    "VS026595",
+    "VS026596",
+    "VS026597",
+    "VS026598",
+    "VS026599",
+    "VS026600",
+    "TL644841",
+    "SS005012",
+    "SS005015",
+];
