@@ -34,7 +34,7 @@ export async function sendMessageToTelegram(messageText) {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message, parse_mode: 'Markdown' }),
+      body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: messageText, parse_mode: 'Markdown' }),
     });
     if (!res.ok) throw new Error(`Telegram API error: ${await res.text()}`);
     console.log('✅ Telegram alert sent');
