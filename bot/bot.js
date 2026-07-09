@@ -12,5 +12,5 @@ export function startBot() {
   // registerStartHandler(bot);
   // registerStatusHandler(bot);
   // console.log('✅ Telegram bot started');
-  console.log('ℹ️  Bot not yet configured — see bot/bot.js');
+  //console.log('ℹ️  Bot not yet configured — see bot/bot.js');
 }

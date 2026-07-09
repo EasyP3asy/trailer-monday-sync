@@ -4,7 +4,7 @@
 
 import { fetchSkybitzPositions } from '../services/skybitz-xml.service.js';
 import { fetchSkybitzAssets }   from '../services/skybitz-scraper/index.js';
-import { sendErrorToTelegram }   from '../services/telegram.service.js';
+import { sendErrorToTelegram ,  sendMessageToTelegram}   from '../services/telegram.service.js';
 import { bulkUpsertTrailerMap }  from '../db/trailer.repository.js';
 import { fetchOrbcommAssets } from '../services/orbcomm/index.js';
 import {
@@ -166,7 +166,7 @@ try{
     const batches = chunk(ops, BATCH_SIZE).map(buildAliasedMutation);
     if (batches.length) await runBatches(batches);
 
-    console.log(`✅ Sync complete — ${trailerMap.size} trailers processed`);
+    await sendMessageToTelegram(`✅ Sync complete — ${trailerMap.size} trailers processed`);
 
   }catch(err){
       await sendErrorToTelegram(`Error processing the data : ${err.message}`);
@@ -174,4 +174,3 @@ try{
   
 }
 
-runSync();

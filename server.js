@@ -17,7 +17,7 @@ app.get('/',       (req, res) => res.status(200).json({ ok: true }));
 
 (async () => {
   try {
-    //await ensureTableExists({ strict: true });
+    await ensureTableExists({ strict: true });
     app.listen(PORT, () => console.log(`🚀 Server running on PORT ${PORT}`));
     startSyncJob();
    // startBot();
