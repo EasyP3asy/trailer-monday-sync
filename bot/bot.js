@@ -7,7 +7,7 @@
  import { registerStartHandler }  from './handlers/start.handler.js';
  import { registerStatusHandler } from './handlers/status.handler.js';
 
-export const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { webHook: true });
+export const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 
 export function startBot() {
   // const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
