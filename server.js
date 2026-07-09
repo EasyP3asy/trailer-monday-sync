@@ -5,14 +5,24 @@ import express from 'express';
 import { ensureTableExists }  from './db/trailer.repository.js';
 import { sendErrorToTelegram } from './services/telegram.service.js';
 import { startSyncJob }        from './jobs/sync.job.js';
-import { startBot }            from './bot/bot.js';
+import { bot, startBot }            from './bot/bot.js';
 import { PORT }                from './config.js';
+
+
 
 const app = express();
 app.use(express.json());
 
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 app.get('/',       (req, res) => res.status(200).json({ ok: true }));
+
+// Telegram sends POST requests to this URL
+app.post('/webhook', (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
+
 
 
 (async () => {

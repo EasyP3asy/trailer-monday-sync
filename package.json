@@ -21,6 +21,7 @@
     "googleapis": "^164.0.0",
     "node-cron": "^4.2.1",
     "node-fetch": "^2.6.0",
+    "node-telegram-bot-api": "^1.1.2",
     "pg": "^8.10.0",
     "tough-cookie": "^6.0.0"
   },

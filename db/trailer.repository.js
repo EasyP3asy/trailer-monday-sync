@@ -96,3 +96,24 @@ export async function bulkUpsertTrailerMap(trailerMap, batchSize = 200) {
     client.release();
   }
 }
+
+
+
+// ---- Fetch all trailers with valid coordinates ----
+export async function getAllTrailers() {
+  const { rows } = await pool.query(`
+    SELECT
+      trailer_number,
+      latitude,
+      longitude,
+      full_address,
+      address_state,
+      idle_duration,
+      time_utc,
+      updated_at
+    FROM ${param}
+    WHERE latitude IS NOT NULL
+      AND longitude IS NOT NULL
+  `);
+  return rows;
+}
