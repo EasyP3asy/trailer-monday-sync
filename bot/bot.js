@@ -17,9 +17,6 @@ bot.on('polling_error', (error) => {
 });
 
 
-bot.on('message', (msg) => {
-  console.log('Message received:', msg.text);
-});
 
 
 
