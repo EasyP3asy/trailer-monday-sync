@@ -6,6 +6,7 @@
  import { TELEGRAM_BOT_TOKEN } from '../config.js';
  import { registerStartHandler }  from './handlers/start.handler.js';
  import { registerStatusHandler } from './handlers/status.handler.js';
+ import { registerNearestHandler } from './handlers/nearest.handler.js';
 
 export const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 
