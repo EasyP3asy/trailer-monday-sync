@@ -19,8 +19,9 @@ app.get('/',       (req, res) => res.status(200).json({ ok: true }));
 // Telegram sends POST requests to this URL
 app.post('/webhook', (req, res) => {
   console.log('Webhook received:', JSON.stringify(req.body));
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
+    res.sendStatus(200);
+    bot.processUpdate(req.body);
+  
 });
 
 
