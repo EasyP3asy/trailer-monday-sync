@@ -9,6 +9,18 @@
 
 export const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
 
+
+
+bot.on('polling_error', (error) => {
+  console.error('Polling error:', error.message);
+});
+
+bot.on('message', (msg) => {
+  console.log('Message received:', msg.text);
+});
+
+
+
 export function startBot() {
   // const bot = new TelegramBot(TELEGRAM_BOT_TOKEN, { polling: true });
    registerStartHandler(bot);
