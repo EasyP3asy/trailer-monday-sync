@@ -32,7 +32,7 @@ app.post('/webhook', (req, res) => {
     await ensureTableExists({ strict: true });
     app.listen(PORT, () => console.log(`🚀 Server running on PORT ${PORT}`));
     startSyncJob();
-   // startBot();
+    startBot();
   } catch (e) {
     console.error('Startup failed:', e);
     try { await sendErrorToTelegram(`Startup failed: ${e.message}`); } catch (_) {}

@@ -13,6 +13,7 @@ const MAX_RESULTS     = 50;
 
 export function registerNearestHandler(bot) {
   bot.onText(/\/nearest (.+)/, async (msg, match) => {
+    console.log('Nearest handler triggered:', match[1]);
     const chatId = msg.chat.id;
 
     // ---- Parse coordinates ----
