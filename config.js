@@ -12,6 +12,7 @@ export const ORBCOMM_USER_PASSWORD   = process.env.ORBCOMM_USER_PASSWORD;
 // ---- Telegram ----
 export const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 export const TELEGRAM_CHAT_ID   = process.env.TELEGRAM_USER_ID;
+export const WEBHOOK_BASE_URL = process.env.WEBHOOK_BASE_URL;
 
 // ---- SkyBitz XML API ----
 export const SKYBITZ_BASE     = process.env.SKYBITZ_BASE;

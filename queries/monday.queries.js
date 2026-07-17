@@ -24,10 +24,10 @@ export const updateMultipleAliasColumnValuesQuery = (boardID, rowID, columnValue
   item_${rowID}: change_multiple_column_values(board_id: ${boardID}, item_id: ${rowID}, column_values: "${gqlEscape(JSON.stringify(columnValues))}") { id }`;
 
 export const createMultipleAliasColumnValuesQuery = (index, boardID, groupId, itemName, columnValues) => `
-  item_${index}: create_item(board_id: ${boardID}, group_id: "${groupId}", item_name: "${itemName}", column_values: "${gqlEscape(JSON.stringify(columnValues))}") { id }`;
+  item_${index}: create_item(board_id: ${boardID}, group_id: "${groupId}", item_name: "${gqlEscape(itemName)}", column_values: "${gqlEscape(JSON.stringify(columnValues))}") { id }`;
 
 export const updateSimpleColumnValueQuery = (boardID, rowID, itemName) => `
-  mutation { change_simple_column_value(board_id: ${boardID}, item_id: ${rowID}, column_id: "name", value: "${itemName.toUpperCase()}") { id } }`;
+  mutation { change_simple_column_value(board_id: ${boardID}, item_id: ${rowID}, column_id: "name", value: "${gqlEscape(itemName.toUpperCase())}") { id } }`;
 
 export const changeGroupPositionQuery = (boardID, groupId, relativeTo) => `
   mutation { update_group(board_id: ${boardID}, group_id: "${groupId}", group_attribute: relative_position_before, new_value: "${relativeTo}") { id } }`;

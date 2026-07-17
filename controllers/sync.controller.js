@@ -20,6 +20,8 @@ import {
   createMultipleAliasColumnValuesQuery,
 } from '../queries/monday.queries.js';
 
+import { toArray } from '../utils/array.utils.js';
+
 import { formatToEasternTime, diffToText } from '../utils/time.utils.js';
 import { TRAILER_BOARD_ID, TRAILER_BOARD_GROUP_ID } from '../config.js';
 
@@ -50,7 +52,7 @@ export async function runSync() {
   if (orbcommAPIAssets.status === 'rejected')
     await sendErrorToTelegram(`⚠️ Orbcomm API failed: ${orbcommAPIAssets.reason?.message}`);
 
-  const xmlTrailers     = skybitzAPIAssets.status === 'fulfilled' ? skybitzAPIAssets.value?.skybitz?.gls ?? [] : [];
+  const xmlTrailers     = skybitzAPIAssets.status === 'fulfilled' ? toArray(skybitzAPIAssets.value?.skybitz?.gls) : [];
   const scrapedAssets   = scrapSkybitzAssets.status   === 'fulfilled' ? scrapSkybitzAssets.value   : [];
   const orbcommAssets   = orbcommAPIAssets.status === 'fulfilled' ? orbcommAPIAssets.value : [];
 
@@ -173,4 +175,6 @@ try{
   }
   
 }
+
+
 

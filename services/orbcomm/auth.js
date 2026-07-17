@@ -22,7 +22,7 @@ export async function login() {
   }; 
 
 
-  try{
+ 
 
   const res = await fetch(GENERATE_ACCESS_TOKEN_URL, {
       method: 'POST',
@@ -32,16 +32,15 @@ export async function login() {
       },
     });
 
-  const {data} = await res.json();
+    if(!res.ok) throw new Error(`ORBCOMM AUTH ERROR : ${res.statusText} (${res.status})`);
+
+    const {data} = await res.json();
 
    
-  if(!res.ok) throw new Error(`ORBCOMM AUTH ERROR : ${res.statusText} (${res.status})`);
+  
 
 
   return data;
 
-}catch(err){
-     // TODO: NEED TO SEND MESSAGE TO TELEGRAM ABOUT ERROR IN ORBCOM AUTHENTICATION
-}
  
 }

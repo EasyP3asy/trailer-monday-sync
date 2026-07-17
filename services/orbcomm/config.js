@@ -63,4 +63,6 @@ export const ASSETS_LIST = [
     "TL644841",
     "SS005012",
     "SS005015",
+    "VS026801",
+    "VS026803",
 ];

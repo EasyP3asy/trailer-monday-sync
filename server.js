@@ -17,11 +17,10 @@ app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 app.get('/',       (req, res) => res.status(200).json({ ok: true }));
 
 // Telegram sends POST requests to this URL
-app.post('/webhook', (req, res) => {
+app.post('/tgwebhook', (req, res) => {
   console.log('Webhook received:', JSON.stringify(req.body));
     res.sendStatus(200);
-    bot.processUpdate(req.body);
-  
+    bot.processUpdate(req.body);  
 });
 
 
@@ -32,7 +31,7 @@ app.post('/webhook', (req, res) => {
     await ensureTableExists({ strict: true });
     app.listen(PORT, () => console.log(`🚀 Server running on PORT ${PORT}`));
     startSyncJob();
-    startBot();
+    await startBot();
   } catch (e) {
     console.error('Startup failed:', e);
     try { await sendErrorToTelegram(`Startup failed: ${e.message}`); } catch (_) {}
