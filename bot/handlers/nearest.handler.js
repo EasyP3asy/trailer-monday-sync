@@ -8,8 +8,29 @@ import { getAllTrailers }    from '../../db/trailer.repository.js';
 import { vincentyDistance }  from '../../utils/geo.utils.js';
 import { formatIdleDuration } from '../../services/idle-tracker.service.js';
 
-const METERS_PER_MILE = 1609.344;
-const MAX_RESULTS     = 50;
+const METERS_PER_MILE  = 1609.344;
+const MAX_RESULTS      = 25;
+const MAX_MESSAGE_CHARS = 3500; // buffer under Telegram's 4096 char limit
+
+// ---- Group blocks so each message's code-block body stays under the char limit ----
+function chunkBlocksByLength(blocks, maxChars) {
+  const chunks = [];
+  let current = [];
+  let currentLen = 0;
+
+  for (const block of blocks) {
+    const addedLen = block.length + 2; // +2 for the '\n\n' separator between blocks
+    if (current.length > 0 && currentLen + addedLen > maxChars) {
+      chunks.push(current);
+      current = [];
+      currentLen = 0;
+    }
+    current.push(block);
+    currentLen += addedLen;
+  }
+  if (current.length) chunks.push(current);
+  return chunks;
+}
 
 export function registerNearestHandler(bot) {
   bot.onText(/\/nearest (.+)/, async (msg, match) => {
@@ -57,33 +78,30 @@ export function registerNearestHandler(bot) {
         .sort((a, b) => a.distanceMiles - b.distanceMiles)
         .slice(0, MAX_RESULTS);
 
-      // ---- Format message ----
-      // Telegram has a 4096 character limit per message
-      // Split into chunks of 25 to stay under the limit
-      const lines = nearest.map((t, i) => {
-        const num      = String(i + 1).padStart(2, ' ');
+      // ---- Format each trailer as a labeled block ----
+      const blocks = nearest.map((t, i) => {
         const distance = t.distanceMiles < 1
           ? `${(t.distanceMiles * 5280).toFixed(0)} ft`
           : `${t.distanceMiles.toFixed(1)} mi`;
-        const idle     = formatIdleDuration(t.idle_duration);
-        const state    = t.address_state || '??';
+        const idle   = formatIdleDuration(t.idle_duration);
+        const latLon = `${t.latitude}, ${t.longitude}`;
 
-        return `${num}. *${t.trailer_number}* — ${distance}\n` +
-               `    📍 ${t.full_address || 'Unknown location'}\n` +
-               `    🏷 ${state} | ⏱ ${idle}`;
+        return `${i + 1}. ${t.trailer_number} — ${distance}\n` +
+               `================\n` +
+               `Location : ${t.full_address || 'Unknown location'}\n` +
+               `Lat&Lon  : ${latLon}\n` +
+               `IDLE     : ${idle}`;
       });
 
       const header = `🚛 *${nearest.length} Nearest Trailers*\n` +
-                     `📌 From: ${lat.toFixed(4)}, ${lon.toFixed(4)}\n` +
-                     `─────────────────────\n`;
+                     `📌 From: ${lat.toFixed(4)}, ${lon.toFixed(4)}\n\n`;
 
-      // Split into two messages of 25 each to avoid hitting Telegram's 4096 char limit
-      const firstHalf  = lines.slice(0, 25).join('\n\n');
-      const secondHalf = lines.slice(25).join('\n\n');
-
-      await bot.sendMessage(chatId, header + firstHalf, { parse_mode: 'Markdown' });
-      if (secondHalf) {
-        await bot.sendMessage(chatId, secondHalf, { parse_mode: 'Markdown' });
+      // ---- Send one message per chunk, each as its own code block ----
+      const chunks = chunkBlocksByLength(blocks, MAX_MESSAGE_CHARS);
+      for (let i = 0; i < chunks.length; i++) {
+        const body = '```\n' + chunks[i].join('\n\n') + '\n```';
+        const text = i === 0 ? header + body : body;
+        await bot.sendMessage(chatId, text, { parse_mode: 'Markdown' });
       }
 
     } catch (err) {

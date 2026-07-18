@@ -24,6 +24,6 @@ export async function startBot() {
     const webhookUrl = `${WEBHOOK_BASE_URL}/tgwebhook`;
     await bot.setWebHook(webhookUrl);
    console.log('✅ Telegram bot started');
-  //console.log('ℹ️  Bot not yet configured — see bot/bot.js');
+
 }
 
