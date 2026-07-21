@@ -23,6 +23,21 @@ app.post('/tgwebhook', (req, res) => {
     bot.processUpdate(req.body);  
 });
 
+app.use((err, req, res, next) => {
+
+   console.error('Express error:', {
+    method: req.method,        // GET, POST etc
+    url: req.url,              // which endpoint
+    errorType: err.type,       // entity.parse.failed etc
+    errorMessage: err.message, // the actual error
+    body: req.body,            // what was parsed (might be empty)
+    rawBody: req.headers['content-type'], // what content type was sent
+    ip: req.ip,                // who sent it
+  });
+
+  res.sendStatus(200);
+});
+
 
 
 

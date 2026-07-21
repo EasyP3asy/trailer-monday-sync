@@ -68,11 +68,10 @@ export async function calculateIdleDurations(trailerMap) {
     if (distanceMiles < MILES_THRESHOLD) {
       // Trailer hasn't moved — add 30 minutes to existing idle time
       trailerObj.idleDuration = prev.idleDuration + IDLE_INCREMENT;
-      console.log(`🅿️  ${trailerNumber}: idle +${IDLE_INCREMENT}min → ${trailerObj.idleDuration}min (moved ${distanceMiles.toFixed(3)} miles)`);
+      
     } else {
       // Trailer moved — reset idle time
-      trailerObj.idleDuration = 0;
-      console.log(`🚛 ${trailerNumber}: moved ${distanceMiles.toFixed(2)} miles → idle reset to 0`);
+      trailerObj.idleDuration = 0;      
     }
   }
 
@@ -82,7 +81,7 @@ export async function calculateIdleDurations(trailerMap) {
 // ---- Format minutes into human readable string ----
 // Used for display in Monday.com column
 export function formatIdleDuration(minutes) {
-  if (!minutes || minutes === 0) return 'Active';
+  if (!minutes || minutes === 0) return 'Moving';
 
   const days  = Math.floor(minutes / (60 * 24));
   const hours = Math.floor((minutes % (60 * 24)) / 60);

@@ -102,12 +102,12 @@ export function parseAssets(html) {
     }
   }
 
-  if (droppedRows.length > 0) {
-    console.warn(
-      `parseAssets: dropped ${droppedRows.length} row(s) that didn't look like valid asset data (missing assetId or non-numeric lat/lon):`,
-      droppedRows.map((r) => r.assetId || "(no id)")
-    );
-  }
+  // if (droppedRows.length > 0) {
+  //   console.warn(
+  //     `parseAssets: dropped ${droppedRows.length} row(s) that didn't look like valid asset data (missing assetId or non-numeric lat/lon):`,
+  //     droppedRows.map((r) => r.assetId || "(no id)")
+  //   );
+  // }
 
   
 
