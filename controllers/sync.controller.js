@@ -174,6 +174,9 @@ try{
     const batches = chunk(ops, BATCH_SIZE).map(buildAliasedMutation);
     if (batches.length) await runBatches(batches);
 
+    await sendMessageToTelegram(`✅ Sync complete — ${trailerMap.size} trailers processed\n`);
+
+    /* DEBUG CODE
     let orbcommBowmanTrailersList = "ORBCOMM Bowman\n================\n";
     let skybitzBowmanTrailerList = "Skybitz Bowman \n================\n";
     let skybitzMetroTrailerList = "Skybitz Metro \n================\n";
@@ -187,13 +190,15 @@ try{
       }
     }
 
-    const allTrailersList = orbcommBowmanTrailersList+skybitzBowmanTrailerList+skybitzMetroTrailerList;
 
-    await sendMessageToTelegram(`✅ Sync complete — ${trailerMap.size} trailers processed\n`);
+
+    
     await sendMessageToTelegram(`${orbcommBowmanTrailersList}`);
     await sendMessageToTelegram(`${skybitzBowmanTrailerList}`);
     await sendMessageToTelegram(`${skybitzMetroTrailerList}`);
 
+
+    */
 
   }catch(err){
       await sendErrorToTelegram(`Error processing the data : ${err.message}`);
