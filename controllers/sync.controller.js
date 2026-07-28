@@ -31,10 +31,10 @@ function makeTrailerObj({
   latitude=null, longitude=null, fullAddress=null,
   addressStreet=null, addressCity=null, addressState=null,
   addressCountry=null, addressPostal=null, idleDuration=0,
-  serialData=null, time=null, rowId=null,
+  serialData=null, time=null, rowId=null,lessor = null, platform = null,
 } = {}) {
   return { latitude, longitude, fullAddress, addressStreet, addressCity,
-    addressState, addressCountry, addressPostal, idleDuration, serialData, time, rowId  };
+    addressState, addressCountry, addressPostal, idleDuration, serialData, time, rowId ,lessor,platform   };
 }
 
 export async function runSync() {
@@ -83,6 +83,8 @@ export async function runSync() {
       addressPostal: postal,      
       serialData: trl?.serial?.serialdata,
       time: formatToEasternTime(new Date(trl?.['time-iso8601'])),
+      lessor : "Bowman",
+      platform : "Skybitz",
     }));
   }
  
@@ -95,6 +97,8 @@ export async function runSync() {
       fullAddress, 
       addressState: asset.state, 
       time: asset.obsTime + ' EST',
+      lessor : "Metro",
+      platform : "Skybitz",
     }));
   }
 
@@ -110,6 +114,8 @@ export async function runSync() {
         addressPostal : asset.zipCode,
         serialData : asset.moving,
         time: formatToEasternTime(asset.obsTime),
+        lessor : "Bowman",
+        platform : "Orbcomm",
       }));
   }
 
@@ -168,7 +174,26 @@ try{
     const batches = chunk(ops, BATCH_SIZE).map(buildAliasedMutation);
     if (batches.length) await runBatches(batches);
 
-    await sendMessageToTelegram(`✅ Sync complete — ${trailerMap.size} trailers processed`);
+    let orbcommBowmanTrailersList = "ORBCOMM Bowman\n================\n";
+    let skybitzBowmanTrailerList = "Skybitz Bowman \n================\n";
+    let skybitzMetroTrailerList = "Skybitz Metro \n================\n";
+    for(const [key,val] of trailerMap){
+      if(val.platform === 'Orbcomm' && val.lessor === 'Bowman'  ){
+        orbcommBowmanTrailersList+=`Trailer : ${key} ${val.platform} ${val.lessor}\n`;
+      }else if(val.platform === 'Skybitz' && val.lessor === 'Metro' ){
+        skybitzMetroTrailerList+=`Trailer : ${key} ${val.platform} ${val.lessor}\n`;
+      }else if(val.platform === 'Skybitz' && val.lessor === 'Bowman'){
+        skybitzBowmanTrailerList+=`Trailer : ${key} ${val.platform} ${val.lessor}\n`;
+      }
+    }
+
+    const allTrailersList = orbcommBowmanTrailersList+skybitzBowmanTrailerList+skybitzMetroTrailerList;
+
+    await sendMessageToTelegram(`✅ Sync complete — ${trailerMap.size} trailers processed\n`);
+    await sendMessageToTelegram(`${orbcommBowmanTrailersList}`);
+    await sendMessageToTelegram(`${skybitzBowmanTrailerList}`);
+    await sendMessageToTelegram(`${skybitzMetroTrailerList}`);
+
 
   }catch(err){
       await sendErrorToTelegram(`Error processing the data : ${err.message}`);
