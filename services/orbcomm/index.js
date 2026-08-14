@@ -8,11 +8,15 @@ import {fetchAssetsData} from './fetcher.js';
 export async function fetchOrbcommAssets() {
   try{
     const accessCredentials = await login(); // 1) getAcessToken 
-    const data = await fetchAssetsData(accessCredentials);
+    const data = await fetchAssetsData(accessCredentials);    
     return parseAssets(data);  // parses response 
     
   }catch(err){
       throw err;
   }
 }
+
+
+
+
 

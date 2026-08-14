@@ -23,7 +23,7 @@ import {
 import { toArray } from '../utils/array.utils.js';
 
 import { formatToEasternTime, diffToText } from '../utils/time.utils.js';
-import { TRAILER_BOARD_ID, TRAILER_BOARD_GROUP_ID } from '../config.js';
+import { TRAILER_BOARD_ID, TRAILER_BOARD_GROUP_ID ,TELEGRAM_SYNC_TOPIC_ID } from '../config.js';
 
 const EXCEPTIONS_SN = [];
 
@@ -174,7 +174,7 @@ try{
     const batches = chunk(ops, BATCH_SIZE).map(buildAliasedMutation);
     if (batches.length) await runBatches(batches);
 
-    await sendMessageToTelegram(`✅ Sync complete — ${trailerMap.size} trailers processed\n`);
+    await sendMessageToTelegram(`✅ Sync complete — ${trailerMap.size} trailers processed\n`, TELEGRAM_SYNC_TOPIC_ID);
 
     /* DEBUG CODE
     let orbcommBowmanTrailersList = "ORBCOMM Bowman\n================\n";
