@@ -47,8 +47,8 @@ export async function runSync() {
 
   if (skybitzAPIAssets.status === 'rejected')
     await sendErrorToTelegram(`⚠️ SkyBitz Bowman failed: ${skybitzAPIAssets.reason?.message}`);  
-  if (scrapSkybitzAssets.status === 'rejected')
-    await sendErrorToTelegram(`⚠️ SkyBitz Metro failed: ${scrapSkybitzAssets.reason?.message}`);
+  // if (scrapSkybitzAssets.status === 'rejected')
+  //    await sendErrorToTelegram(`⚠️ SkyBitz Metro failed: ${scrapSkybitzAssets.reason?.message}`);
   if (orbcommAPIAssets.status === 'rejected')
     await sendErrorToTelegram(`⚠️ Orbcomm API failed: ${orbcommAPIAssets.reason?.message}`);
 
