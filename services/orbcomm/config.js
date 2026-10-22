@@ -112,4 +112,5 @@ export const ASSETS_LIST = [
 	'GT003791',
 	'GT003989',
 	'GT004005',
+	'RC10711',
 ];
